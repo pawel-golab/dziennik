@@ -1,0 +1,73 @@
+:root {
+    --back-1: #002b36;
+    --back-2: #073642;
+    --comment: #586e75;
+    --color-1: #93a1a1;
+    --color-2: #ffffff;
+    /*#fdf6e3*/
+    --warning: #b58900;
+    --important: #cb4b16;
+    --error: #dc322f;
+    --accent-1: #d33682;
+    --accent-2: #6c71c4;
+    --link: #268bd2;	
+    --info: #2aa198;
+    --success: #859900;
+}
+
+body {
+    background-color: var(--back-1);
+    color: var(--color-1);
+    margin: 0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: var(--color-2);
+}
+
+#main-content {
+    text-align: center;
+}
+
+header#navbar{
+    color: var(--color-2);
+    background-color: var(--back-2);
+}
+
+.index-row > .col-sm-3{
+    text-align: right;
+    background-color: var(--back-2);
+}
+.index-row > .col-sm-9{
+    text-align: left;
+    background-color: rgba(0,0,0,.2);
+}
+
+/* ==========  NADPISYWANIE BOOTSTRAPA  ========== */
+a:link {
+    color: var(--link);
+}
+a:hover {
+    color: var(--accent-1);
+}
+a:active {
+    color: var(--accent-2);
+}
+
+/* ==========  STYLOWANIE PODSTAWOWE  ========= */
+
+.accent{color: var(--accent-1);}
+.error{color:var(--error)}
+
+.darker {
+    background-color: rgba(0,0,0,.2);
+}
+
+.toR{text-align: right;}
+.toL{text-align: left;}
+
+/* responsywne obrazki wewnątrz div zamiast class="img-flui" */
+/* #taskData img{
+    max-width: 100%;
+    height: auto;
+} */

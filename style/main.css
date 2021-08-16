@@ -55,7 +55,8 @@ a:active {
 }
 
 /* ==========  STYLOWANIE PODSTAWOWE  ========= */
-
+.main{background-color:var(--back-1)}
+.main-2{background-color:var(--back-2)}
 .accent{color: var(--accent-1);}
 .error{color:var(--error)}
 

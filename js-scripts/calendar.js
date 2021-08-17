@@ -100,8 +100,8 @@ function generateFullCalendar(
  * @param {Number} m month (mm)
  * @param {Element} el where to put calendar (.class / #id / id)
  * @param {Array} tags tags for: [dtag (day), dhTag (day header), dcTag (day conent)]
- * @param {Array} tagsClasses classes for tags [dTagClass, dhTagClass, dcTagClass]
- * @param {Array} tagsStyles styles for tags [dTagStyle, ..., todayStyle, weekendStyle]
+ * @param {Array} tagsClasses classes for tags [dTagClass, dhTagClass, dcTagClass, todayClass, weekendClass]
+ * @param {Array} tagsStyles styles for tags [dTagStyle, ...]
  * @param {Array} tagsRest rest data for tags [dTagRest, ...]
  * @param {Boolean} strict true - generate calendar only days in this month
  */
@@ -110,7 +110,7 @@ function generateCalendar(
     y, m, el,
     tags, tagsClasses, tagsStyles, tagsRest,
     strict //#todo #5 implement strict mode in calendar
-) //#todo #4 zmienić tą listę argumentów na (y,m,el, Tag[(d,w,h-header)], tagClass[(d,w,h)], tagStyle[(d,w,h)], tagRest[(d,w,h)] )
+) //todo #6 add to tagsStyles[...,todayStyle,weekendStyle] //related with todo #4
 {
     /////////////////////////////////////////////////
     ////////// WERYFIKACJA ARGUMENTÓW DATY //////////
@@ -139,7 +139,7 @@ function generateCalendar(
         tags[i] = tag.replaceAll('<','').replaceAll('>','')
     })
 
-    dTag = tags[0] ?? 'div';
+    dTag = null0(tags[0]) ? 'div' : tags[0];
     dhTag = tags[1];    // \/
     dcTag = tags[2];    //nie potrzebny coalesce - puste taki dh i dc oznaczają generowanie prostszego kalendarza/\
 
@@ -188,10 +188,47 @@ function generateCalendar(
         dTagRest = dhTagRest = dcTagRest = '';
     }
 
-    //////////  //////////
+    ////////// GENERACJA KALENDARZA //////////
 
     if( dhTag && dcTag )
-        return generateFullCalendar(y, m, el, dTag, dTagClass, dTagStyle, dTagRest, dhTag, dhTagClass, dhTagStyle, dhTagRest, dcTag, dcTagClass, dcTagStyle, dcTagRest)
+        generateFullCalendar(y, m, el, dTag, dTagClass, dTagStyle, dTagRest, dhTag, dhTagClass, dhTagStyle, dhTagRest, dcTag, dcTagClass, dcTagStyle, dcTagRest)
     
-    return generateAccualCalendar(y, m, el, dTag, dTagClass, dTagStyle, dTagRest)
+    generateAccualCalendar(y, m, el, dTag, dTagClass, dTagStyle, dTagRest)
+
+    ////////// nałożenie klas i stylów na "dzień dzisiejszy" //////////
+
+    let todayStyles = null0(tagsStyles[3])
+        ? ''
+        : tagsStyles[3].split(';');
+
+    $(el).find(`[data-day="${new Date().getDate()}"][data-month="${m}"]`).each( function()
+    {
+        if(!null0(tagsClasses[3])){
+            $(this).addClass(tagsClasses[3]);
+        }
+
+        for( let todayStyle of todayStyles ) {
+            todayStyle = todayStyle.split(':');
+            
+            $(this).css(todayStyle[0]?.trim(),todayStyle[1]?.trim());
+        }
+    })
+
+    ////////// nałożenie klas i stylów na weekendy //////////
+    let lastDay = new Date(y,m,0);
+    let firstSaturday = (lastDay.getDate()-lastDay.getDay()-1) % 7;
+    
+
+    /*todo #7 zamiast poniższej pętli zrobić:
+    $(el).find(`[data-month="${m}"]`)
+    i przebindować klucze - żeby 0 to był pierwszy dzień miesiąca
+    następnie zrobić zwyczajnego fora po kluczach powyższej tablicy*/
+    for( let i = firstSaturday; i < lastDay; i+=7 ) {
+        $(el).find(`[data-day="${i}"][data-month="${m}"]`).each( function()
+        {
+            if(!null0(tagsClasses[4])){
+                $(this).addClass(tagsClasses[4]);
+            }            
+        })
+    }
 }

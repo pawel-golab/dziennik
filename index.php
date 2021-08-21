@@ -25,7 +25,7 @@ if( !isset($_SESSION['logged']) )
     <body>
 
         <?php
-            include("./includes/header.html");
+            include("./header.html");
         ?>
         
         <main>

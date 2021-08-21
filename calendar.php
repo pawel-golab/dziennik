@@ -21,7 +21,7 @@
     <title>Kalendarz</title>
 </head>
 
-<?php require './includes/header.html'; ?>
+<?php require './header.html'; ?>
 <div id="calendar"></div>
 <script>
 

@@ -92,10 +92,8 @@ function generateFullCalendar(
     }
 
     el.innerHTML = out;
-
 }
 /**
- * 
  * @param {Number} y year (YYYY)
  * @param {Number} m month (mm)
  * @param {Element} el where to put calendar (.class / #id / id)
@@ -197,15 +195,21 @@ function generateCalendar(
 
     ////////// nałożenie klas i stylów na "dzień dzisiejszy" //////////
 
+    // zamienienie stringa z css'e, na tablicę w której każdy wiersz to: atrybut:wartość
     let todayStyles = null0(tagsStyles[3])
         ? ''
         : tagsStyles[3].split(';');
+        // // alternatywa
+        // : tagsStyles[3].match('.*;')
+            // ? tagsStytles[3].substring(0,-1).split(';')
+            // : tagsStytles[3].split(';');
 
     $(el).find(`[data-day="${new Date().getDate()}"][data-month="${m}"]`).each( function()
     {
-        if(!null0(tagsClasses[3])){
-            $(this).addClass(tagsClasses[3]);
-        }
+        // co jeżeli będzie: atrybut1:wartość1;atrybuty2:wartość2; lub nawet ;;, ;;; etc.:
+        // if(!null0(tagsClasses[3])){
+        //     $(this).addClass(tagsClasses[3]);
+        // }
 
         for( let todayStyle of todayStyles ) {
             todayStyle = todayStyle.split(':');
@@ -217,18 +221,31 @@ function generateCalendar(
     ////////// nałożenie klas i stylów na weekendy //////////
     let lastDay = new Date(y,m,0);
     let firstSaturday = (lastDay.getDate()-lastDay.getDay()-1) % 7;
-    
+    lastDay = lastDay.getDate();
 
-    /*todo #7 zamiast poniższej pętli zrobić:
-    $(el).find(`[data-month="${m}"]`)
-    i przebindować klucze - żeby 0 to był pierwszy dzień miesiąca
-    następnie zrobić zwyczajnego fora po kluczach powyższej tablicy*/
-    for( let i = firstSaturday; i < lastDay; i+=7 ) {
-        $(el).find(`[data-day="${i}"][data-month="${m}"]`).each( function()
-        {
-            if(!null0(tagsClasses[4])){
-                $(this).addClass(tagsClasses[4]);
-            }            
-        })
+    let weekendStyles = null0(tagsStyles[4])
+        ? ''
+        : tagsStyles[4].split(';');
+
+    for( let i = firstSaturday; i < lastDay; i+=6 ) {
+        $(el).find(`[data-day="${i}"][data-month="${m}"]`).each( function(){
+            $(this).addClass(tagsClasses[4]);
+
+            for( let weekendStyle of weekendStyles ) {
+                weekendStyle = weekendStyle.split(':');
+                
+                $(this).css(weekendStyle[0]?.trim(),weekendStyle[1]?.trim());
+            }
+        });
+        i++;
+        $(el).find(`[data-day="${i}"][data-month="${m}"]`).each( function(){
+            $(this).addClass(tagsClasses[4]);
+
+            for( let weekendStyle of weekendStyles ) {
+                weekendStyle = weekendStyle.split(':');
+                
+                $(this).css(weekendStyle[0]?.trim(),weekendStyle[1]?.trim());
+            }
+        });
     }
 }

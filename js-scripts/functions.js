@@ -4,7 +4,7 @@
  * @returns {Boolean} 
  */
 function null0(x) {
-    if( x == null || x == 0 || x == undefined ) return true; return false;
+    if( x == null || x == 0 || x == undefined || x == [] ) return true; return false;
 }
 /**
  * @param {*} output any expression

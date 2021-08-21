@@ -1,2 +1,3 @@
 # dziennik
 HELLO WORLD
+LICENSE: BEERWARE

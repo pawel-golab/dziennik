@@ -1,0 +1,13 @@
+<meta charset="UTF-8"></meta>
+
+<form action="../scripts/add_calendar_task.php" method="POST">
+    Data:<br>
+    <input type="date" name="taskDate" id="taskDateInput"><br><br>
+    Godzina:<br>
+    <input type="time" name="taskTime" id="taskTimeInput"><br><br>
+    Tytuł zdarzenia:<br>
+    <textarea name="taskName" id="taskNameInput" pattern=".{5,64}" title="Tytuł zdarzenia powinien mieć od 5 do 64 znaków" cols="32" rows="2"></textarea><br><br>
+    Opis zdarzenia:<br>
+    <textarea name="taskDesc" id="taskDescriptionInput" pattern=".{0,256}" title="Opis powinien mieć mniej niż 256 znaków" cols="32" rows="8"></textarea><br><br>
+    <input type="submit" value="Dodaj">
+</form>

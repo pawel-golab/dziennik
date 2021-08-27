@@ -47,7 +47,7 @@
     //------ WYSŁANIE ZAPYTANIA
 
     $statement = $pdo -> prepare(
-        "SELECT *
+        "SELECT *,u.id
         FROM `user` u
         LEFT JOIN `teacher` t ON t.id = u.teacher_id
         LEFT JOIN `student` s ON s.id = u.student_id
@@ -60,6 +60,7 @@
     {
         if( password_verify($password, $fetched['password']) ) {
             $_SESSION['logged'] = true;
+            $_SESSION['userId'] = $fetched['id'];
             header('location: ../index.php');
             die('Nieoczekiwany błąd. Spróbuj odświeżyć stronę');
         }

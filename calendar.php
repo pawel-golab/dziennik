@@ -8,33 +8,82 @@
     <script src="./js-scripts/functions.js"></script>
     <script src="./js-scripts/calendar.js"></script>
     <style>
+        #calendar-settings {
+            background-color: var(--back-2);
+        }
         #calendar {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template: repeat( 6, minmax(50px, auto) ) / repeat( 7, 1fr );
             column-gap: 2px;
-            grid-template-rows: 50px 50px 50px 50px 50px 50px;
             row-gap: 2px;
-            width: 90%;
-            margin: auto;
+        }
+
+        #calendar div.task {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 5px;
+            margin: 2px;
+            padding: 2px;
         }
     </style>
     <title>Kalendarz</title>
 </head>
+<body>
+    
+    <?php
+        session_start();
+        require './header.html';
+        require './scripts/connection.php';
+    ?>
+    <div class="row no-gutters">
+        <div id="calendar-settings" class="col-sm-2"></div>
+        <div id="calendar" class="col-sm-10"></div>
+    </div>
 
-<?php require './header.html'; ?>
-<div id="calendar"></div>
+    <button type="button">Dodaj wpis do kalendarza</button>
+</body>
+
 <script>
 
     let date = new Date;
-    let m   = date.getMonth();      //month
-    let y   = date.getFullYear();   //year
+    let m = date.getMonth();      //month
+    let y = date.getFullYear();   //year
 
     //testowanie:
     
-    generateCalendar(
-        y, m+1, '#calendar',
-        ['','span','<div>'],                 //tags
-        ['main-2','day-number','day-tasks','accent', 'error'],    //classes
-        [0,0,0,'filter: brightness(1.2);','font-style: italic'], //styles
-    );
+    let c = new Calendar(y,m+1);
+    c.SetPlaceholder('#calendar');
+    c.SetDayClasses('main-2','day-number','day-tasks')
+    c.GenerateFullCalendar();
+
+    <?php
+        $sql = $pdo -> prepare(
+            'SELECT
+            *,
+            day(`task_date_start`) as `day`,
+            concat(date_format(`task_date_start`,"%H:%i"),"-",date_format(`task_date_end`,"%H:%i")) as `time`
+            FROM `calendar_task`
+            WHERE `user_id` = ?
+            AND month(`task_date_start`) = ?
+            ORDER BY `day`'
+        );
+
+        $sql -> execute([
+            $_SESSION['userId'],
+            date('n')
+        ]);
+        
+        for( $i = 0; $task = $sql -> fetch(); $i++ ) {
+            echo <<< TASK
+                \$('#calendar').find(
+                    `[data-day="{$task['day']}"][data-month="\${m+1}"] [data-calendar="content"]`
+                ).each( function(){
+                    \$(this).append(
+                        "<div class='task' title='{$task['time']}'>{$task['title']}</div>"
+                    );
+                });
+TASK;
+            // $tasks[] = $task;
+        }
+    ?>
+
 </script>

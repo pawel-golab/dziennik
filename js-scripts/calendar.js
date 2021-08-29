@@ -2,11 +2,7 @@ class Calendar{
 
     constructor(
         y = new Date().getFullYear(),
-        m = new Date().getMonth(), el,
-        dayTag, dayHeaderTag, dayContentTag,
-        dayClass, dayHeaderClass, dayContentClass,
-        dayStyle, dayHeaderStyle, dayContentStyle,
-        dayRest, dayHeaderRest, dayContentRest
+        m = new Date().getMonth(), el
     )
     {        
         if( null0(y) || parseInt(y) != y || y < 2000 || y > 2200 ) //pierwszy warunek raczej opcjonalny
@@ -21,15 +17,15 @@ class Calendar{
 
 
         this.SetPlaceholder(el);
-        this.SetDayTags(dayTag, dayHeaderTag, dayContentTag);
-        this.SetDayClasses(dayClass, dayHeaderClass, dayContentClass);
-        this.SetDayStyles(dayStyle, dayHeaderStyle, dayContentStyle);
-        this.SetDayRest(dayRest, dayHeaderRest, dayContentRest);
-        
+        this.DayTag = this.DayHeaderTag = this.DayContentTag = 'div';
+        this.DayClass = this.DayHeaderClass = this.DayContentClass =
+        this.DayStyle = this.DayHeaderStyle = this.DayContentStyle =
+        this.DayRest = this.DayHeaderRest = this.DayContentRest =
+        this.TodayClass = this.TodayStyle = this.WeekendClass = this.WeekendStyle = '';
     };
     /**
      * Gets element that will store whole calendar
-     * @param {string} el class (.class) or id (#id / id)
+     * @param {Sstring} el class (.class) or id (#id / id)
      */
     SetPlaceholder(el){
         if( !null0(el) ){
@@ -67,9 +63,9 @@ class Calendar{
     };
     /**
      * Class names that will be added to day cards
-     * @param {*} dayClass class name of whole day card (header+content)
-     * @param {*} dayHeaderClass class name of header part of day card
-     * @param {*} dayContentClass class name of content part of day card
+     * @param {String} dayClass class name of whole day card (header+content)
+     * @param {String} dayHeaderClass class name of header part of day card
+     * @param {String} dayContentClass class name of content part of day card
      */
     SetDayClasses(dayClass, dayHeaderClass, dayContentClass){
         this.DayClass = null0(dayClass)
@@ -77,35 +73,71 @@ class Calendar{
             : 'class="' + dayClass + '"';
         this.DayHeaderClass = null0(dayHeaderClass)
             ? ''
-            : 'class="' + dayClass + '"';
-        this.DayContentClass =  null0(dayContentClass)
+            : 'class="' + dayHeaderClass + '"';
+        this.DayContentClass = null0(dayContentClass)
             ? ''
             : 'class="' + dayContentClass + '"';
     };
     /**
-     * css style that will be added to day cards
-     * @param {*} dayStyle style of whole day card (header+content)
-     * @param {*} dayHeaderStyle style of header part of day card
-     * @param {*} dayContentStyle style of content part of day card
+     * Css style that will be added to day cards
+     * @param {String} dayStyle style of whole day card (header+content)
+     * @param {String} dayHeaderStyle style of header part of day card
+     * @param {String} dayContentStyle style of content part of day card
      */
     SetDayStyles(dayStyle, dayHeaderStyle, dayContentStyle){
-        this.DayStyle = !null0(dayStyle)
+        this.DayStyle = null0(dayStyle)
             ? ''
             : 'style="' + dayStyle+ '"';
-        this.DayHeaderStyle = !null0(dayHeaderStyle)
+        this.DayHeaderStyle = null0(dayHeaderStyle)
             ? ''
             : 'style="' + dayHeaderStyle + '"';
-        this.DayContentStyle = !null0(dayContentStyle)
+        this.DayContentStyle = null0(dayContentStyle)
             ? ''
             : 'style="' + dayContentStyle + '"';
     };
-
+    /**
+     * Attributes that will be added to day cards
+     * @param {String} dayRest attributes and values of whole day card (header+content)
+     * @param {String} dayHeaderRest attributes and values of header part of day card
+     * @param {String} dayContentRest attributes and values of content part of day card
+     */
     SetDayRest(dayRest, dayHeaderRest, dayContentRest){
-        this.DayRest = dayRest ?? '';
-        this.DayHeaderRest = dayHeaderRest ?? '';
-        this.DayContentRest = dayContentRest ?? '';
+        this.DayRest = null0(dayRest)
+            ? ''
+            : dayRest;
+        this.DayHeaderRest = null0(dayHeaderRest)
+            ? ''
+            : dayHeaderRest;
+        this.DayContentRest = null0(dayContentRest)
+            ? ''
+            : dayContentRest;
     };
-
+    /**
+     * Styling of present day card
+     * @param {String} todayClass class name of present day card
+     * @param {String} todayStyle css style of present day card
+     */
+    SetPresentDayStyling(todayClass,todayStyle){  
+        this.TodayClass = null0(todayClass)
+            ? ''
+            : todayClass;
+        this.TodayStyle = null0(todayStyle)
+            ? ''
+            : todayStyle;
+    };
+    /**
+     * Styling of weekend cards
+     * @param {String} weekendClass class name of weekend cards
+     * @param {String} weekendStyle css style of weekend cards
+     */
+    SetWeekendStyling(weekendClass,weekendStyle){        
+        this.WeekendClass = null0(weekendClass)
+            ? ''
+            : weekendClass;
+        this.WeekendStyle = null0(weekendStyle)
+            ? ''
+            : weekendStyle;
+    };
     GenerateSimpleCalendar(){
         let y = this.Y, m = this.M,
         dT = this.DayTag, dC = this.DayClass, dS = this.DayStyle, dR = this.DayRest;
@@ -198,72 +230,69 @@ class Calendar{
         }
 
         this.El.innerHTML = out;
+        this.MarkPresentDay();
+        this.MarkWeekend();
     };
-}
+    MarkPresentDay(){
+        // zamienienie stringa z css'em, na tablicę w której każdy wiersz to: atrybut:wartość
+        let todayStyles = null0(this.TodayStyle)
+            ? ''
+            : this.TodayStyle.split(';');
 
-function generateCalendar(
-)
-{
-    ////////// GENERACJA KALENDARZA //////////
+        let todayClass = this.TodayClass;
 
-    if( dhT && dcT )
-        generateFullCalendar(y, m, el, dT, dC, dS, dR, dhT, dhC, dhS, dhR, dcT, dcC, dcS, dcR)
-    else
-        generateAccualCalendar(y, m, el, dT, dC, dS, dR)
+        $(this.El).find(`[data-day="${new Date().getDate()}"][data-month="${this.M}"]`).each( function()
+        {
+            // co jeżeli będzie: atrybut1:wartość1;atrybuty2:wartość2; lub nawet ;;, ;;; etc.:
 
-    ////////// nałożenie klas i stylów na "dzień dzisiejszy" //////////
+            if( !null0(todayClass) ){
+                $(this).addClass(todayClass);
+            }
+    
+            for( let todayStyle of todayStyles ) {
+                cl(todayStyle)
+                todayStyle = todayStyle.split(':');
 
-    // zamienienie stringa z css'e, na tablicę w której każdy wiersz to: atrybut:wartość
-    let todayStyles = null0(tagsStyles[3])
-        ? ''
-        : tagsStyles[3].split(';');
-        // // alternatywa
-        // : tagsStyles[3].match('.*;')
-            // ? tagsStytles[3].substring(0,-1).split(';')
-            // : tagsStytles[3].split(';');
+                $(this).css(todayStyle[0]?.trim(),todayStyle[1]?.trim());
+            }
+        })
+    };
+    MarkWeekend(){
+        let lastDay = new Date(this.Y,this.M,0);
+        let firstSaturday = (lastDay.getDate()-lastDay.getDay()-1) % 7;
+        lastDay = lastDay.getDate();
+    
+        let weekendStyles = null0(this.WeekendStyle)
+            ? ''
+            : this.WeekendStyle.split(';');
 
-    $(el).find(`[data-day="${new Date().getDate()}"][data-month="${m}"]`).each( function()
-    {
-        // co jeżeli będzie: atrybut1:wartość1;atrybuty2:wartość2; lub nawet ;;, ;;; etc.:
-        if(!null0(tagsClasses[3])){
-            $(this).addClass(tagsClasses[3]);
+        let weekendClass = this.WeekendClass;
+    
+        for( let i = firstSaturday; i < lastDay; i+=6 ) {
+            //Saturday
+            $(this.El).find(`[data-day="${i}"][data-month="${this.M}"]`).each( function()
+            {
+                $(this).addClass(weekendClass);
+                
+                for( let weekendStyle of weekendStyles ) {
+                    
+                    weekendStyle = weekendStyle.split(':');
+                    $(this).css(weekendStyle[0]?.trim(),weekendStyle[1]?.trim());
+                }
+            });
+            i++;
+            //Sunday
+            $(this.El).find(`[data-day="${i}"][data-month="${this.M}"]`).each( function()
+            {
+                $(this).addClass(weekendClass);
+    
+                for( let weekendStyle of weekendStyles ) {
+                    weekendStyle = weekendStyle.split(':');
+                    
+                    $(this).css(weekendStyle[0]?.trim(),weekendStyle[1]?.trim());
+                }
+            });
         }
 
-        for( let todayStyle of todayStyles ) {
-            todayStyle = todayStyle.split(':');
-            
-            $(this).css(todayStyle[0]?.trim(),todayStyle[1]?.trim());
-        }
-    })
-
-    ////////// nałożenie klas i stylów na weekendy //////////
-    let lastDay = new Date(y,m,0);
-    let firstSaturday = (lastDay.getDate()-lastDay.getDay()-1) % 7;
-    lastDay = lastDay.getDate();
-
-    let weekendStyles = null0(tagsStyles[4])
-        ? ''
-        : tagsStyles[4].split(';');
-
-    for( let i = firstSaturday; i < lastDay; i+=6 ) {
-        $(el).find(`[data-day="${i}"][data-month="${m}"]`).each( function(){
-            $(this).addClass(tagsClasses[4]);
-
-            for( let weekendStyle of weekendStyles ) {
-                weekendStyle = weekendStyle.split(':');
-                
-                $(this).css(weekendStyle[0]?.trim(),weekendStyle[1]?.trim());
-            }
-        });
-        i++;
-        $(el).find(`[data-day="${i}"][data-month="${m}"]`).each( function(){
-            $(this).addClass(tagsClasses[4]);
-
-            for( let weekendStyle of weekendStyles ) {
-                weekendStyle = weekendStyle.split(':');
-                
-                $(this).css(weekendStyle[0]?.trim(),weekendStyle[1]?.trim());
-            }
-        });
     }
 }

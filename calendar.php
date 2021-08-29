@@ -50,9 +50,9 @@
 
     //testowanie:
     
-    let c = new Calendar(y,m+1);
-    c.SetPlaceholder('#calendar');
-    c.SetDayClasses('main-2','day-number','day-tasks')
+    let c = new Calendar(y,m+1,'#calendar');
+    c.SetDayClasses('main-2','day-number','day-tasks');
+    c.SetPresentDayStyling('today');
     c.GenerateFullCalendar();
 
     <?php

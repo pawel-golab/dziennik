@@ -1,12 +1,12 @@
 <html lang="pl-PL">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="stylesheet" href="./bootstrap-5/css/bootstrap.min.css"> <!--bootstrap css-->
-    <script src="https://kit.fontawesome.com/d5272c5ae6.js" crossorigin="anonymous"></script> <!--fontawesome-->
-    <script src="./js-scripts/jQuery.js"></script>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="./bootstrap-5/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/d5272c5ae6.js" crossorigin="anonymous"></script> fontawesome
+    <script src="./external-scripts/jQuery.js"></script> 
     <script src="./js-scripts/themes.js"></script>
-    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./style/main.css">-->
     <title>eDziennik - Ustawienia</title>
 </head>
 <body>

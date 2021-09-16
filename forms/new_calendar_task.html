@@ -1,13 +1,47 @@
-<meta charset="UTF-8"></meta>
+<div id="dialog">
+    <form action="../scripts/add_calendar_task.php" method="POST">
+        Data rozpoczęcia:<br>
+        <input type="date" name="taskStartDate" id="taskStartDateInput" required><br><br>
+        Godzina rozpoczęcia:<br>
+        <input type="time" name="taskStartTime" id="taskStartTimeInput" required><br><br>
+        Data zakończenia:<br>
+        <input type="date" name="taskEndDate" id="taskEndDateInput" required><br><br>
+        Godzina zakończenia:<br>
+        <input type="time" name="taskEndTime" id="taskEndTimeInput" required><br><br>
 
-<form action="../scripts/add_calendar_task.php" method="POST">
-    Data:<br>
-    <input type="date" name="taskDate" id="taskDateInput"><br><br>
-    Godzina:<br>
-    <input type="time" name="taskTime" id="taskTimeInput"><br><br>
-    Tytuł zdarzenia:<br>
-    <textarea name="taskName" id="taskNameInput" pattern=".{5,64}" title="Tytuł zdarzenia powinien mieć od 5 do 64 znaków" cols="32" rows="2"></textarea><br><br>
-    Opis zdarzenia:<br>
-    <textarea name="taskDesc" id="taskDescriptionInput" pattern=".{0,256}" title="Opis powinien mieć mniej niż 256 znaków" cols="32" rows="8"></textarea><br><br>
-    <input type="submit" value="Dodaj">
-</form>
+        Tytuł zdarzenia:<br>
+        <textarea
+            name="taskName" id="taskNameInput"
+            minlength="5" maxlength="64"
+            title="Tytuł zdarzenia powinien mieć od 5 do 64 znaków"
+            cols="32" rows="2" required
+        ></textarea><br><br>
+
+        Opis zdarzenia:<br>
+        <textarea
+            name="taskDesc" id="taskDescriptionInput"
+            maxlength="256"
+            title="Opis powinien mieć mniej niż 256 znaków"
+            cols="32" rows="8" required
+        ></textarea><br><br>
+        <button type="submit" id="submitNewCalendarTask">Dodaj</button>
+    </form>
+
+    <script>
+        $('#taskStartDateInput').change( function(){
+            $('#taskEndDateInput').val($(this).val())
+        });
+        $('#taskStartTimeInput').change( function(){
+            let x = $(this).val().split(':'),
+                h = parseInt(x[0]),
+                m = parseInt(x[1]) + 45;
+            h += parseInt(m/60);
+            m %= 60;
+
+            $('#taskEndTimeInput').val(h.pad(3)+":"+m.pad(3))
+        });
+        $('#submitNewCalendarTask').click( function() {
+            
+        });
+    </script>
+</div>
